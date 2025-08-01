@@ -41,9 +41,9 @@ A browser extension that captures highlighted text from Google Docs and saves it
 1. Open `about:debugging`
 2. Click "This Firefox"  
 3. Click "Load Temporary Add-on"
-4. Select the `manifest-v2.json` file (Firefox requires Manifest V2)
+4. Select the `manifest.json` file
 
-**Note**: Firefox uses `manifest-v2.json` instead of `manifest.json` due to limited Manifest V3 support.
+**Note**: This extension uses Manifest V3 with Firefox-compatible background scripts.
 
 ### Step 2: Configure Settings
 
@@ -107,8 +107,7 @@ The extension will create a properly formatted Markdown file in your Obsidian re
 ## File Structure
 
 ```text
-├── manifest.json          # Extension manifest (Manifest V3 - Chrome/Edge)
-├── manifest-v2.json       # Extension manifest (Manifest V2 - Firefox)
+├── manifest.json          # Extension manifest (Manifest V3 - All browsers)
 ├── popup.html             # Extension popup interface
 ├── popup.js               # Popup logic and GitHub API calls
 ├── popup.css              # Popup styling
@@ -131,15 +130,16 @@ The following files are kept for reference but are no longer needed:
 - `config.js` - Old configuration file
 - `demo.html` - Bookmarklet demo page
 - `firefox-test.js` - Firefox troubleshooting
+- `manifest-v2.json` - Old Manifest V2 file (no longer needed)
 
 ## Troubleshooting
 
 ### Extension Not Loading
 
-1. **Firefox**: Make sure you selected `manifest-v2.json` (not `manifest.json`)
-2. **Chrome/Edge**: Use `manifest.json` and enable "Developer Mode"
-3. **Check Console Errors**: Look for JavaScript errors in browser developer tools
-4. **Permissions**: Ensure the extension has access to Google Docs when prompted
+1. **Enable Developer Mode**: Required for Chrome/Edge unpacked extensions
+2. **Check Console Errors**: Look for JavaScript errors in browser developer tools
+3. **Permissions**: Ensure the extension has access to Google Docs when prompted
+4. **Manifest V3**: This extension uses Manifest V3 with Firefox-compatible background scripts
 
 ### No Text Captured
 
