@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidian Bookmarklet Demo - Google Docs</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .demo-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px dashed #ddd;
+        }
+        
+        .selectable {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            cursor: text;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .bookmarklet-code {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: Monaco, 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .step h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 Obsidian Google Docs Bookmarklet Demo</h1>
+    
+    <div class="instructions">
+        <h3>🚨 Important Note</h3>
+        <p>For security reasons, this demo page won't actually save to GitHub. To use the real bookmarklet:</p>
+        <ol>
+            <li>Configure your GitHub token in the code</li>
+            <li>Test on an actual Google Docs page</li>
+            <li>Make sure you're signed into your GitHub account</li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <h3>Step 1: Setup Instructions</h3>
+        <p>Before using the bookmarklet, you need to:</p>
+        <ol>
+            <li>Create a GitHub Personal Access Token with <code>repo</code> permissions</li>
+            <li>Edit the <code>CONFIG.GITHUB_TOKEN</code> in the bookmarklet code</li>
+            <li>Update the repository owner and name to match your setup</li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <h3>Step 2: Create the Bookmarklet</h3>
+        <p>Copy this minified code and create a new bookmark with it as the URL:</p>
+        <div class="bookmarklet-code" id="bookmarklet-code">
+            Loading bookmarklet code...
+        </div>
+        <button onclick="copyBookmarklet()">📋 Copy Bookmarklet Code</button>
+    </div>
+    
+    <div class="step">
+        <h3>Step 3: Test the Interface</h3>
+        <p>Select some text below and click the "Test Bookmarklet" button to see the interface:</p>
+        
+        <div class="demo-content">
+            <h4>Sample Meeting Notes Content</h4>
+            <div class="selectable">
+                <p><strong>Action Items from Today's Meeting:</strong></p>
+                <ul>
+                    <li>John will follow up with the client by Friday</li>
+                    <li>Sarah needs to review the budget proposal</li>
+                    <li>Team will schedule a follow-up meeting for next week</li>
+                    <li>Mike will prepare the technical documentation</li>
+                </ul>
+                <p><strong>Key Decisions:</strong></p>
+                <ul>
+                    <li>Approved the new feature roadmap</li>
+                    <li>Decided to move forward with the Q4 timeline</li>
+                    <li>Selected the new vendor for the project</li>
+                </ul>
+            </div>
+        </div>
+        
+        <button onclick="testBookmarklet()">🧪 Test Bookmarklet Interface</button>
+    </div>
+    
+    <div class="step">
+        <h3>Step 4: Usage on Google Docs</h3>
+        <p>Once configured:</p>
+        <ol>
+            <li>Open any Google Doc</li>
+            <li>Select/highlight the text you want to capture</li>
+            <li>Click your bookmarklet</li>
+            <li>Fill in the meeting details</li>
+            <li>Click "Save to Obsidian"</li>
+        </ol>
+    </div>
+    
+    <script>
+        // Simulate being on docs.google.com for demo purposes
+        Object.defineProperty(window.location, 'hostname', {
+            writable: false,
+            value: 'docs.google.com'
+        });
+        
+        // Override document.title for demo
+        document.title = 'Demo Meeting Notes - Google Docs';
+        
+        // Load the bookmarklet code
+        fetch('https://raw.githubusercontent.com/jczimskey/obsidian-gdocs-bookmarklet/main/bookmarklet.min.js')
+            .then(response => response.text())
+            .then(code => {
+                document.getElementById('bookmarklet-code').textContent = code;
+            })
+            .catch(error => {
+                document.getElementById('bookmarklet-code').textContent = 'Error loading bookmarklet code. Please check the repository.';
+            });
+        
+        function copyBookmarklet() {
+            const code = document.getElementById('bookmarklet-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('📋 Bookmarklet code copied to clipboard!\n\nNow create a new bookmark and paste this as the URL.');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy to clipboard. Please select and copy the text manually.');
+            });
+        }
+        
+        function testBookmarklet() {
+            const selectedText = window.getSelection().toString().trim();
+            
+            if (!selectedText) {
+                alert('Please select some text first to test the bookmarklet!');
+                return;
+            }
+            
+            // Load and execute the bookmarklet code for demo
+            fetch('https://raw.githubusercontent.com/jczimskey/obsidian-gdocs-bookmarklet/main/bookmarklet.js')
+                .then(response => response.text())
+                .then(code => {
+                    // Execute the bookmarklet code
+                    eval(code);
+                })
+                .catch(error => {
+                    alert('Error loading bookmarklet: ' + error.message);
+                });
+        }
+        
+        // Add some helpful text selection for demo
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectableElements = document.querySelectorAll('.selectable');
+            selectableElements.forEach(element => {
+                element.addEventListener('click', function() {
+                    const range = document.createRange();
+                    range.selectNodeContents(this);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
