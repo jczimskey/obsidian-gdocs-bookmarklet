@@ -37,10 +37,13 @@ A browser extension that captures highlighted text from Google Docs and saves it
 3. Click "Load unpacked" and select this folder
 
 #### Firefox:
+
 1. Open `about:debugging`
-2. Click "This Firefox"
+2. Click "This Firefox"  
 3. Click "Load Temporary Add-on"
-4. Select the `manifest.json` file
+4. Select the `manifest-v2.json` file (Firefox requires Manifest V2)
+
+**Note**: Firefox uses `manifest-v2.json` instead of `manifest.json` due to limited Manifest V3 support.
 
 ### Step 2: Configure Settings
 
@@ -103,8 +106,9 @@ The extension will create a properly formatted Markdown file in your Obsidian re
 
 ## File Structure
 
-```
-├── manifest.json          # Extension manifest (Manifest V3)
+```text
+├── manifest.json          # Extension manifest (Manifest V3 - Chrome/Edge)
+├── manifest-v2.json       # Extension manifest (Manifest V2 - Firefox)
 ├── popup.html             # Extension popup interface
 ├── popup.js               # Popup logic and GitHub API calls
 ├── popup.css              # Popup styling
@@ -132,9 +136,10 @@ The following files are kept for reference but are no longer needed:
 
 ### Extension Not Loading
 
-1. **Check Manifest V3 compatibility**: This extension uses Manifest V3
-2. **Enable Developer Mode**: Required for loading unpacked extensions
+1. **Firefox**: Make sure you selected `manifest-v2.json` (not `manifest.json`)
+2. **Chrome/Edge**: Use `manifest.json` and enable "Developer Mode"
 3. **Check Console Errors**: Look for JavaScript errors in browser developer tools
+4. **Permissions**: Ensure the extension has access to Google Docs when prompted
 
 ### No Text Captured
 
