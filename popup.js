@@ -27,33 +27,67 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Get selected text from the content script
     try {
-        const [result] = await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: () => {
-                const selection = window.getSelection();
-                const selectedText = selection.toString().trim();
-                const docTitle = document.title.replace(' - Google Docs', '').trim();
-                const docUrl = window.location.href;
-                
-                return { selectedText, docTitle, docUrl };
+        // Try Manifest V3 scripting API first (Chrome)
+        if (chrome.scripting && chrome.scripting.executeScript) {
+            const [result] = await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: () => {
+                    const selection = window.getSelection();
+                    const selectedText = selection.toString().trim();
+                    const docTitle = document.title.replace(' - Google Docs', '').trim();
+                    const docUrl = window.location.href;
+                    
+                    return { selectedText, docTitle, docUrl };
+                }
+            });
+            
+            if (!result.result.selectedText) {
+                noSelectionEl.style.display = 'block';
+                return;
             }
-        });
-        
-        if (!result.result.selectedText) {
-            noSelectionEl.style.display = 'block';
-            return;
+            
+            // Show the capture form
+            captureFormEl.style.display = 'block';
+            document.getElementById('captured-text').value = result.result.selectedText;
+            document.getElementById('meeting-title').focus();
+            
+            // Handle form submission
+            document.getElementById('obsidian-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleSave(result.result, config);
+            });
+            
+        } else {
+            // Fallback to legacy tabs API (Firefox event pages)
+            const [result] = await chrome.tabs.executeScript(tab.id, {
+                code: `
+                    (function() {
+                        const selection = window.getSelection();
+                        const selectedText = selection.toString().trim();
+                        const docTitle = document.title.replace(' - Google Docs', '').trim();
+                        const docUrl = window.location.href;
+                        
+                        return { selectedText, docTitle, docUrl };
+                    })();
+                `
+            });
+            
+            if (!result.selectedText) {
+                noSelectionEl.style.display = 'block';
+                return;
+            }
+            
+            // Show the capture form
+            captureFormEl.style.display = 'block';
+            document.getElementById('captured-text').value = result.selectedText;
+            document.getElementById('meeting-title').focus();
+            
+            // Handle form submission
+            document.getElementById('obsidian-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleSave(result, config);
+            });
         }
-        
-        // Show the capture form
-        captureFormEl.style.display = 'block';
-        document.getElementById('captured-text').value = result.result.selectedText;
-        document.getElementById('meeting-title').focus();
-        
-        // Handle form submission
-        document.getElementById('obsidian-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await handleSave(result.result, config);
-        });
         
     } catch (error) {
         console.error('Error getting selection:', error);

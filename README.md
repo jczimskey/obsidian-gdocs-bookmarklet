@@ -43,7 +43,7 @@ A browser extension that captures highlighted text from Google Docs and saves it
 3. Click "Load Temporary Add-on"
 4. Select the `manifest.json` file
 
-**Note**: This extension uses Manifest V3 with Firefox-compatible background scripts.
+**Note**: This extension uses Manifest V3 with event pages for Firefox compatibility and service workers for Chrome/Edge.
 
 ### Step 2: Configure Settings
 
@@ -139,7 +139,7 @@ The following files are kept for reference but are no longer needed:
 1. **Enable Developer Mode**: Required for Chrome/Edge unpacked extensions
 2. **Check Console Errors**: Look for JavaScript errors in browser developer tools
 3. **Permissions**: Ensure the extension has access to Google Docs when prompted
-4. **Manifest V3**: This extension uses Manifest V3 with Firefox-compatible background scripts
+4. **Manifest V3**: This extension uses event pages (Firefox) and service workers (Chrome/Edge) for proper cross-browser compatibility
 
 ### No Text Captured
 
