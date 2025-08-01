@@ -1,123 +1,162 @@
-# Obsidian Google Docs Bookmarklet
+# Obsidian Google Docs Capture Extension
 
-A simple bookmarklet tool that captures highlighted text from Google Docs and saves it directly to your Obsidian notes repository via GitHub API.
+A browser extension that captures highlighted text from Google Docs and saves it directly to your Obsidian notes repository via GitHub API.
+
+## 🌟 Why Browser Extension Instead of Bookmarklet?
+
+- **🔒 Better Security**: No Content Security Policy issues
+- **🦊 Firefox Compatible**: Works reliably in all modern browsers
+- **⚡ Better Performance**: Native browser APIs instead of injected JavaScript
+- **🎨 Better UI**: Dedicated popup interface with proper styling
+- **⚙️ Settings Page**: Secure storage for configuration
 
 ## Features
 
-- 📝 Capture selected text from any Google Doc
-- 🔗 One-click bookmarklet interface
-- 📅 Automatic meeting note formatting
+- 📝 Capture selected text from any Google Doc with one click
+- 🔗 Clean, native browser extension interface
+- 📅 Automatic meeting note formatting with customizable templates
 - 🏷️ Add context like meeting title, attendees, and tags
-- 🔄 Direct GitHub API integration
-- 📋 Markdown formatting for Obsidian compatibility
+- 🔄 Direct GitHub API integration with fine-grained token support
+- 📋 Markdown formatting optimized for Obsidian
+- 🔒 Secure settings storage using browser APIs
 
 ## Quick Setup
 
-1. **Configure your settings** in `config.js`
-2. **Add the bookmarklet** to your browser bookmarks
-3. **Select text** in Google Docs and click your bookmarklet
-4. **Fill in the form** and save to your Obsidian repo
-
-## Files
-
-- `bookmarklet.js` - Main bookmarklet code
-- `config.js` - Configuration settings
-- `style.css` - Popup styling
-- `demo.html` - Test the bookmarklet locally
+1. **Load the extension** in your browser (Chrome/Firefox/Edge)
+2. **Configure GitHub settings** in the extension options
+3. **Select text** in Google Docs and click the extension icon
+4. **Fill in meeting details** and save to your Obsidian repository
 
 ## Installation
 
-### Step 1: Choose Your Security Approach
+### Step 1: Load the Extension
 
-**⚠️ Security Note**: This bookmarklet requires a GitHub token to function. Since bookmarklets run client-side JavaScript, the token cannot be truly secret. Choose the most secure option for your needs:
+#### Chrome/Edge:
+1. Open `chrome://extensions/` (or `edge://extensions/`)
+2. Enable "Developer mode"
+3. Click "Load unpacked" and select this folder
 
-#### Option A: Personal Access Token (Fine-grained, Recommended)
-
-1. Create a **fine-grained personal access token** in GitHub Settings
-2. Scope it to **only your Obsidian notes repository**
-3. Grant only **Contents: Write** and **Metadata: Read** permissions
-4. Set a short expiration period (30-90 days)
-
-#### Option B: Server-Side Proxy (Most Secure)
-
-For maximum security, consider creating a simple server endpoint that:
-
-- Accepts note data via POST request
-- Uses repository secrets to store the GitHub token
-- Forwards requests to GitHub API
-- Update the bookmarklet to call your server instead of GitHub directly
+#### Firefox:
+1. Open `about:debugging`
+2. Click "This Firefox"
+3. Click "Load Temporary Add-on"
+4. Select the `manifest.json` file
 
 ### Step 2: Configure Settings
 
-Edit `config.js` with your GitHub details:
+1. Click the extension icon and select "Settings"
+2. Or right-click the extension icon → "Options"
+3. Fill in your GitHub repository details:
 
-```javascript
-const CONFIG = {
-    GITHUB_TOKEN: 'your_fine_grained_token_here', // Use fine-grained token
-    REPO_OWNER: 'your_username',
-    REPO_NAME: 'obsidian-notes',
-    NOTES_PATH: 'Meeting Notes/' // Optional: subfolder for meeting notes
-};
+**Required Settings:**
+- **GitHub Token**: Fine-grained personal access token
+- **Repository Owner**: Your GitHub username
+- **Repository Name**: Your Obsidian notes repository
+
+**Optional Settings:**
+- **Notes Path**: Subfolder for meeting notes (e.g., "Meeting Notes/")
+- **Template Settings**: Customize what gets included in notes
+- **Default Tags**: Tags automatically added to every note
+
+### Step 3: Create GitHub Token
+
+1. Go to [GitHub Settings → Personal access tokens → Fine-grained tokens](https://github.com/settings/personal-access-tokens/fine-grained)
+2. Click "Generate new token"
+3. Configure:
+   - **Repository access**: Only select your Obsidian notes repository
+   - **Permissions**: 
+     - Contents (Write) - to create/update files
+     - Metadata (Read) - to access repository info
+   - **Expiration**: 90 days or less (more secure)
+4. Copy the token and add it to extension settings
+
+## Usage
+
+1. **Open any Google Doc**
+2. **Select/highlight** the text you want to capture
+3. **Click the extension icon** (📝) in your browser toolbar
+4. **Fill in the meeting details**:
+   - Meeting Title (required)
+   - Attendees (optional)
+   - Tags (optional, defaults to "meeting-notes")
+   - Custom filename (optional, auto-generated if empty)
+5. **Click "Save to Obsidian"**
+
+The extension will create a properly formatted Markdown file in your Obsidian repository!
+
+## Security Features
+
+### Fine-Grained Tokens (Recommended)
+- Scope access to only your Obsidian repository
+- Minimal permissions (Contents: Write, Metadata: Read)
+- Short expiration periods for better security
+
+### Secure Storage
+- Settings stored using browser's secure storage APIs
+- Tokens encrypted at rest by the browser
+- No data transmitted to third parties
+
+### Privacy
+- No analytics or tracking
+- All data stays between your browser, GitHub, and Obsidian
+- Open source for full transparency
+
+## File Structure
+
+```
+├── manifest.json          # Extension manifest (Manifest V3)
+├── popup.html             # Extension popup interface
+├── popup.js               # Popup logic and GitHub API calls
+├── popup.css              # Popup styling
+├── options.html           # Settings page
+├── options.js             # Settings page logic
+├── options.css            # Settings page styling
+├── content.js             # Content script for Google Docs
+├── content.css            # Content script styles
+├── background.js          # Background script
+├── icons/                 # Extension icons (16, 32, 48, 128px)
+└── README.md              # This file
 ```
 
-### Step 3: Create the Bookmarklet
+## Legacy Files (Bookmarklet Version)
 
-1. Copy the minified code from `bookmarklet.min.js`
-2. Create a new bookmark in your browser
-3. Set the URL to the JavaScript code (starting with `javascript:`)
+The following files are kept for reference but are no longer needed:
 
-### Step 3: Usage
+- `bookmarklet.js` - Original bookmarklet code
+- `bookmarklet.min.js` - Minified bookmarklet
+- `config.js` - Old configuration file
+- `demo.html` - Bookmarklet demo page
+- `firefox-test.js` - Firefox troubleshooting
 
-1. Open any Google Doc
-2. Highlight the text you want to capture
-3. Click your bookmarklet
-4. Fill in the meeting details
-5. Click "Save to Obsidian"
+## Troubleshooting
 
-## GitHub Token Setup
+### Extension Not Loading
 
-**Important**: Use **fine-grained personal access tokens** for better security:
+1. **Check Manifest V3 compatibility**: This extension uses Manifest V3
+2. **Enable Developer Mode**: Required for loading unpacked extensions
+3. **Check Console Errors**: Look for JavaScript errors in browser developer tools
 
-1. Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens
-2. Generate a new fine-grained token with:
-   - **Repository access**: Only select repositories (choose your Obsidian notes repo)
-   - **Permissions**: Contents (Write), Metadata (Read)
-   - **Expiration**: 30-90 days (shorter is more secure)
-3. Add it to your `config.js`
+### No Text Captured
 
-### Alternative: Server-Side Proxy
+1. **Select text first**: Highlight text in Google Docs before clicking the extension
+2. **Check permissions**: Ensure the extension has permission to access Google Docs
+3. **Refresh the page**: Sometimes a page refresh helps with content script loading
 
-For production use, consider creating a simple server proxy:
+### GitHub API Errors
 
-```javascript
-// Example Express.js endpoint
-app.post('/api/save-note', async (req, res) => {
-  const { filename, content } = req.body;
-  
-  // GitHub token stored securely on server
-  const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}`, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `token ${process.env.GITHUB_TOKEN}`, // From server environment
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      message: `Add note: ${filename}`,
-      content: Buffer.from(content).toString('base64')
-    })
-  });
-  
-  res.json(await response.json());
-});
-```
+1. **Test connection**: Use the "Test Connection" button in settings
+2. **Check token permissions**: Ensure Contents (Write) and Metadata (Read) are granted
+3. **Verify repository exists**: Double-check repository owner and name
+4. **Token expiration**: Fine-grained tokens expire - check if yours is still valid
 
-Then update the bookmarklet to call your server instead of GitHub directly.
+## Development
 
-## Customization
+To modify or extend this extension:
 
-- Modify the note template in `bookmarklet.js`
-- Adjust styling in `style.css`
-- Add custom fields to the capture form
+1. **Make changes** to the source files
+2. **Reload the extension** in your browser's extension manager
+3. **Test thoroughly** on actual Google Docs pages
+4. **Check console logs** for any JavaScript errors
 
 ## Contributing
 

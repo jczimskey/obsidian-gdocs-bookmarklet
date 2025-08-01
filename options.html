@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidian Capture Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ Obsidian Capture Settings</h1>
+            <p>Configure your GitHub repository details to save captured notes from Google Docs.</p>
+        </div>
+        
+        <div class="security-warning">
+            <h3>🔒 Security Notice</h3>
+            <p><strong>Use Fine-Grained Personal Access Tokens:</strong></p>
+            <ul>
+                <li>Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained</li>
+                <li><strong>Repository access:</strong> Only select your Obsidian notes repository</li>
+                <li><strong>Permissions:</strong> Contents (Write), Metadata (Read)</li>
+                <li><strong>Expiration:</strong> 30-90 days (shorter is more secure)</li>
+            </ul>
+        </div>
+        
+        <form id="settings-form">
+            <div class="form-section">
+                <h3>GitHub Configuration</h3>
+                
+                <div class="form-group">
+                    <label for="github-token">GitHub Token *</label>
+                    <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx" required>
+                    <small>Your fine-grained personal access token</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="repo-owner">Repository Owner *</label>
+                    <input type="text" id="repo-owner" placeholder="your-username" required>
+                    <small>Your GitHub username or organization name</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="repo-name">Repository Name *</label>
+                    <input type="text" id="repo-name" placeholder="obsidian-notes" required>
+                    <small>Name of your Obsidian notes repository</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes-path">Notes Path</label>
+                    <input type="text" id="notes-path" placeholder="Meeting Notes/">
+                    <small>Optional: Subfolder for meeting notes (with trailing slash)</small>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Template Settings</h3>
+                
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="include-doc-title" checked>
+                        <span>Include document title in notes</span>
+                    </label>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="include-doc-url" checked>
+                        <span>Include document URL</span>
+                    </label>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="include-timestamp" checked>
+                        <span>Include timestamp</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="default-tags">Default Tags</label>
+                    <input type="text" id="default-tags" placeholder="meeting-notes, imported" value="meeting-notes">
+                    <small>Comma-separated tags to add to every note</small>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" id="test-connection" class="button secondary">🔗 Test Connection</button>
+                <button type="submit" class="button primary">💾 Save Settings</button>
+            </div>
+        </form>
+        
+        <div id="status" class="message" style="display: none;"></div>
+        
+        <div class="help-section">
+            <h3>📚 Quick Setup Guide</h3>
+            <ol>
+                <li><strong>Create a fine-grained GitHub token</strong> with access to your Obsidian notes repository</li>
+                <li><strong>Fill in your repository details</strong> above</li>
+                <li><strong>Test the connection</strong> to verify everything works</li>
+                <li><strong>Save settings</strong> and start capturing notes from Google Docs!</li>
+            </ol>
+            
+            <p><strong>Usage:</strong> Select text in any Google Doc, click the extension icon, fill in the meeting details, and save to your Obsidian vault!</p>
+        </div>
+    </div>
+    
+    <script src="options.js"></script>
+</body>
+</html>

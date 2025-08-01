@@ -144,6 +144,19 @@
         </ol>
     </div>
     
+    <div class="step">
+        <h3>🔧 Troubleshooting Firefox Issues</h3>
+        <div class="instructions">
+            <p><strong>If the bookmarklet doesn't work in Firefox:</strong></p>
+            <ul>
+                <li><strong>Enhanced Tracking Protection</strong>: Click the shield icon in Firefox's address bar and disable protection for Google Docs</li>
+                <li><strong>Check Console</strong>: Press F12 → Console tab to see JavaScript errors</li>
+                <li><strong>Content Security Policy</strong>: Google Docs blocks inline JavaScript - try Chrome/Edge instead</li>
+                <li><strong>Test Here First</strong>: Use this demo page to verify the bookmarklet works before trying on Google Docs</li>
+            </ul>
+        </div>
+    </div>
+    
     <script>
         // Simulate being on docs.google.com for demo purposes
         Object.defineProperty(window.location, 'hostname', {

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidian Capture</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <div class="header">
+            <h2>📝 Obsidian Capture</h2>
+        </div>
+        
+        <div id="not-google-docs" class="message error" style="display: none;">
+            <p>This extension only works on Google Docs pages.</p>
+            <p>Please navigate to a Google Doc and try again.</p>
+        </div>
+        
+        <div id="no-selection" class="message warning" style="display: none;">
+            <p>No text selected!</p>
+            <p>Please select some text in the Google Doc first.</p>
+        </div>
+        
+        <div id="not-configured" class="message warning" style="display: none;">
+            <p>Extension not configured yet.</p>
+            <button id="open-options" class="button">⚙️ Open Settings</button>
+        </div>
+        
+        <div id="capture-form" style="display: none;">
+            <form id="obsidian-form">
+                <div class="form-group">
+                    <label for="meeting-title">Meeting Title *</label>
+                    <input type="text" id="meeting-title" placeholder="e.g. Weekly Team Sync" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="attendees">Attendees</label>
+                    <input type="text" id="attendees" placeholder="e.g. John, Jane, Mike">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <input type="text" id="tags" placeholder="e.g. meeting, action-items" value="meeting-notes">
+                </div>
+                
+                <div class="form-group">
+                    <label for="filename">File Name</label>
+                    <input type="text" id="filename" placeholder="Auto-generated if empty">
+                </div>
+                
+                <div class="form-group">
+                    <label for="captured-text">Captured Text</label>
+                    <textarea id="captured-text" rows="4" readonly></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" id="cancel-btn" class="button secondary">Cancel</button>
+                    <button type="submit" id="save-btn" class="button primary">💾 Save to Obsidian</button>
+                </div>
+            </form>
+            
+            <div id="status" class="message" style="display: none;"></div>
+        </div>
+        
+        <div class="footer">
+            <button id="settings-btn" class="button small">⚙️ Settings</button>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
