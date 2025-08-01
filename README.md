@@ -27,20 +27,40 @@ A simple bookmarklet tool that captures highlighted text from Google Docs and sa
 
 ## Installation
 
-### Step 1: Configure Settings
+### Step 1: Choose Your Security Approach
+
+**⚠️ Security Note**: This bookmarklet requires a GitHub token to function. Since bookmarklets run client-side JavaScript, the token cannot be truly secret. Choose the most secure option for your needs:
+
+#### Option A: Personal Access Token (Fine-grained, Recommended)
+
+1. Create a **fine-grained personal access token** in GitHub Settings
+2. Scope it to **only your Obsidian notes repository**
+3. Grant only **Contents: Write** and **Metadata: Read** permissions
+4. Set a short expiration period (30-90 days)
+
+#### Option B: Server-Side Proxy (Most Secure)
+
+For maximum security, consider creating a simple server endpoint that:
+
+- Accepts note data via POST request
+- Uses repository secrets to store the GitHub token
+- Forwards requests to GitHub API
+- Update the bookmarklet to call your server instead of GitHub directly
+
+### Step 2: Configure Settings
 
 Edit `config.js` with your GitHub details:
 
 ```javascript
 const CONFIG = {
-    GITHUB_TOKEN: 'your_github_token_here',
+    GITHUB_TOKEN: 'your_fine_grained_token_here', // Use fine-grained token
     REPO_OWNER: 'your_username',
     REPO_NAME: 'obsidian-notes',
     NOTES_PATH: 'Meeting Notes/' // Optional: subfolder for meeting notes
 };
 ```
 
-### Step 2: Create the Bookmarklet
+### Step 3: Create the Bookmarklet
 
 1. Copy the minified code from `bookmarklet.min.js`
 2. Create a new bookmark in your browser
@@ -56,13 +76,42 @@ const CONFIG = {
 
 ## GitHub Token Setup
 
-You'll need a GitHub Personal Access Token with `repo` permissions:
+**Important**: Use **fine-grained personal access tokens** for better security:
 
-1. Go to GitHub Settings → Developer settings → Personal access tokens
-2. Generate a new token with `repo` scope
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens
+2. Generate a new fine-grained token with:
+   - **Repository access**: Only select repositories (choose your Obsidian notes repo)
+   - **Permissions**: Contents (Write), Metadata (Read)
+   - **Expiration**: 30-90 days (shorter is more secure)
 3. Add it to your `config.js`
 
-⚠️ **Security Note**: Never commit your token to a public repository!
+### Alternative: Server-Side Proxy
+
+For production use, consider creating a simple server proxy:
+
+```javascript
+// Example Express.js endpoint
+app.post('/api/save-note', async (req, res) => {
+  const { filename, content } = req.body;
+  
+  // GitHub token stored securely on server
+  const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filename}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${process.env.GITHUB_TOKEN}`, // From server environment
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: `Add note: ${filename}`,
+      content: Buffer.from(content).toString('base64')
+    })
+  });
+  
+  res.json(await response.json());
+});
+```
+
+Then update the bookmarklet to call your server instead of GitHub directly.
 
 ## Customization
 

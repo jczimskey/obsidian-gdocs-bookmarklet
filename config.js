@@ -1,9 +1,13 @@
 // Configuration for the Obsidian Google Docs Bookmarklet
-// Copy this file to config.local.js and add your actual values
+// ⚠️ SECURITY WARNING: This config is used by client-side JavaScript
+// DO NOT commit your actual token to version control!
 
 const CONFIG = {
-    // Your GitHub Personal Access Token (with repo permissions)
-    GITHUB_TOKEN: 'your_github_token_here',
+    // Your GitHub Fine-Grained Personal Access Token
+    // Generate at: GitHub Settings → Developer settings → Personal access tokens → Fine-grained
+    // Permissions needed: Contents (Write), Metadata (Read)
+    // Scope: Only your Obsidian notes repository
+    GITHUB_TOKEN: 'your_fine_grained_token_here',
     
     // Your GitHub username
     REPO_OWNER: 'your_username',
